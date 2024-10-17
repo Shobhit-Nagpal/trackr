@@ -25,6 +25,19 @@ func createTrackrDir(homeDir string) error {
 	return nil
 }
 
+func createProject(name, link string) error {
+  //Check if project exists
+  return nil
+}
+
 func createProjectDir(name string) error {
 	return nil
+}
+
+func projectExists(name string) bool {
+  return false
+}
+
+func getProjectPath(trackrDir, name string) string {
+  return fmt.Sprintf("%s/%s", trackrDir, name)
 }
