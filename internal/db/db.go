@@ -4,7 +4,16 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strings"
+
+	"github.com/charmbracelet/lipgloss"
 )
+
+var style = lipgloss.NewStyle().
+	Bold(true).
+	Foreground(lipgloss.Color("#FAFAFA")).
+	Background(lipgloss.Color("#7D56F4")).
+	PaddingTop(2)
 
 func InitDB() error {
 	homeDir, err := os.UserHomeDir()
@@ -25,20 +34,25 @@ func InitDB() error {
 }
 
 func CreateProject(name, link string) {
-	_, err := os.UserHomeDir()
+	homeDir, err := os.UserHomeDir()
 	if err != nil {
 		log.Fatalf("DB ERROR: %s", err.Error())
 	}
 
-  //Check if project already exists
-  if projectExists(name) {
-    log.Fatalf("%s already exists\n", name)
-  }
+  projectName := strings.ToLower(name)
 
-  err = createProject(name, link)
-  if err != nil {
-    log.Fatalf("Project creation error: %s", err.Error())
-  }
+	//Check if project already exists
+	if projectExists(homeDir, projectName) {
+		log.Fatalf("%s already exists\n", name)
+	}
+
+	err = createProject(homeDir, projectName, link)
+	if err != nil {
+		log.Fatalf("Project creation error: %s", err.Error())
+	}
+
+	fmt.Println(style.Render("Project created!"))
+
 }
 
 func GetProjects() []string {

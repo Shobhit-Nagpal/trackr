@@ -13,25 +13,26 @@ import (
 
 func main() {
 
-	listCmd := flag.NewFlagSet("list", flag.ExitOnError)
-  addCmd := flag.NewFlagSet("add", flag.ExitOnError)
-
-	if len(os.Args) < 2 {
-		cmd.Initialize()
-	}
-
 	err := db.InitDB()
 	if err != nil {
 		log.Fatalf("DB INIT ERROR: ", err.Error())
 	}
 
+
+	listCmd := flag.NewFlagSet("list", flag.ExitOnError)
+  addCmd := flag.NewFlagSet("add", flag.ExitOnError)
+
+	if len(os.Args) < 2 {
+		cmd.Render()
+	}
+
 	switch os.Args[1] {
 	case "list":
 		listCmd.Parse(os.Args[2:])
-		list.Initialize()
+		list.Render()
 	case "add":
     addCmd.Parse(os.Args[2:])
-    add.Initialize()
+    add.Render()
 	case "remove":
 		log.Println("Add remove subcommand")
 	case "view":

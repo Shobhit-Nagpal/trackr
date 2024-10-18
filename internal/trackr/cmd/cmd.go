@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/Shobhit-Nagpal/trackr/internal/trackr/add"
 	tea "github.com/charmbracelet/bubbletea"
 )
 
@@ -17,7 +18,7 @@ func initialModel() model {
 	return model{
 		commands: []string{"add", "remove", "list", "view"},
 		cursor:   0,
-		selected: -1,
+		selected: 0,
 	}
 }
 
@@ -41,6 +42,9 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			}
 		case "enter", " ":
 			//Handle project selection --> Change view to project view here
+      if m.cursor == 0 {
+        add.Render()
+      }
 		}
 
 	}
@@ -49,7 +53,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m model) View() string {
-	s := "Choose a command \n\n"
+	s := "\n\nChoose a command \n\n"
 	//Read projects here
 
 	for idx, project := range m.commands {
@@ -63,13 +67,13 @@ func (m model) View() string {
 			checked = "X"
 		}
 
-		s += fmt.Sprintf("%s [%s] %s\n", cursor, checked, project)
+		s += fmt.Sprintf("%s [%s] %s\n\n", cursor, checked, project)
 	}
 
 	return s
 }
 
-func Initialize() {
+func Render() {
 	p := tea.NewProgram(initialModel())
 	if _, err := p.Run(); err != nil {
 		fmt.Printf("Alas, there's been an error: %v", err)

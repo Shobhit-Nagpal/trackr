@@ -149,7 +149,7 @@ func (m *model) prevInput() {
 	}
 }
 
-func Initialize() {
+func Render() {
 	p := tea.NewProgram(initialModel())
 
 	if _, err := p.Run(); err != nil {
