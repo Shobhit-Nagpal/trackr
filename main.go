@@ -21,9 +21,12 @@ func main() {
 
 	listCmd := flag.NewFlagSet("list", flag.ExitOnError)
   addCmd := flag.NewFlagSet("add", flag.ExitOnError)
+  removeCmd := flag.NewFlagSet("remove", flag.ExitOnError)
+  viewCmd := flag.NewFlagSet("view", flag.ExitOnError)
 
 	if len(os.Args) < 2 {
 		cmd.Render()
+    return
 	}
 
 	switch os.Args[1] {
@@ -34,11 +37,12 @@ func main() {
     addCmd.Parse(os.Args[2:])
     add.Render()
 	case "remove":
+    removeCmd.Parse(os.Args[2:])
 		log.Println("Add remove subcommand")
 	case "view":
-		log.Println("Add view subcommand")
+    viewCmd.Parse(os.Args[2:])
+		log.Println("Add remove subcommand")
   default:
     log.Println("Command not recognized")
-    os.Exit(1)
 	}
 }

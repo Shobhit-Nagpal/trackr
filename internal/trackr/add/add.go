@@ -10,7 +10,7 @@ import (
 	"github.com/charmbracelet/lipgloss"
 )
 
-type model struct {
+type AddModel struct {
 	inputs  []textinput.Model
 	focused int
 	err     error
@@ -51,7 +51,7 @@ func linkValidator(s string) error {
 	return fmt.Errorf("GitHub repo should be created for the project")
 }
 
-func initialModel() model {
+func InitialAddModel() AddModel {
 	var inputs []textinput.Model = make([]textinput.Model, 2)
 	inputs[name] = textinput.New()
 	inputs[name].Placeholder = "Trackr"
@@ -68,18 +68,18 @@ func initialModel() model {
 	inputs[link].Prompt = ""
 	inputs[link].Validate = linkValidator
 
-	return model{
+	return AddModel{
 		inputs:  inputs,
 		focused: 0,
 		err:     nil,
 	}
 }
 
-func (m model) Init() tea.Cmd {
+func (m AddModel) Init() tea.Cmd {
 	return textinput.Blink
 }
 
-func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+func (m AddModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	var cmds []tea.Cmd = make([]tea.Cmd, len(m.inputs))
 
 	switch msg := msg.(type) {
@@ -115,7 +115,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	return m, tea.Batch(cmds...)
 }
 
-func (m model) View() string {
+func (m AddModel) View() string {
 	return fmt.Sprintf(
 		`Create a new project:
 
@@ -136,12 +136,12 @@ func (m model) View() string {
 }
 
 // nextInput focuses the next input field
-func (m *model) nextInput() {
+func (m *AddModel) nextInput() {
 	m.focused = (m.focused + 1) % len(m.inputs)
 }
 
 // prevInput focuses the previous input field
-func (m *model) prevInput() {
+func (m *AddModel) prevInput() {
 	m.focused--
 	// Wrap around
 	if m.focused < 0 {
@@ -150,7 +150,7 @@ func (m *model) prevInput() {
 }
 
 func Render() {
-	p := tea.NewProgram(initialModel())
+	p := tea.NewProgram(InitialAddModel())
 
 	if _, err := p.Run(); err != nil {
 		log.Fatal(err)

@@ -8,26 +8,26 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 )
 
-type model struct {
+type ListModel struct {
 	projects []string
 	cursor   int
 	selected int
 }
 
-func initialModel() model {
+func initialModel() ListModel {
 	projects := db.GetProjects()
-	return model{
+	return ListModel{
 		projects: projects,
 		cursor:   0,
 		selected: 0,
 	}
 }
 
-func (m model) Init() tea.Cmd {
+func (m ListModel) Init() tea.Cmd {
 	return nil
 }
 
-func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+func (m ListModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		switch msg.String() {
@@ -50,7 +50,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	return m, nil
 }
 
-func (m model) View() string {
+func (m ListModel) View() string {
 	s := "Choose a project to view\n\n"
 	//Read projects here
 

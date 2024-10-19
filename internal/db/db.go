@@ -12,8 +12,8 @@ import (
 var style = lipgloss.NewStyle().
 	Bold(true).
 	Foreground(lipgloss.Color("#FAFAFA")).
-	Background(lipgloss.Color("#7D56F4")).
-	PaddingTop(2)
+	Background(lipgloss.Color("#0092F8")).
+  PaddingLeft(2)
 
 func InitDB() error {
 	homeDir, err := os.UserHomeDir()
