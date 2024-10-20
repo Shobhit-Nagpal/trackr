@@ -10,6 +10,7 @@ import (
 	"github.com/Shobhit-Nagpal/trackr/internal/trackr/cmd"
 	"github.com/Shobhit-Nagpal/trackr/internal/trackr/list"
 	"github.com/Shobhit-Nagpal/trackr/internal/trackr/remove"
+	"github.com/Shobhit-Nagpal/trackr/internal/trackr/view"
 )
 
 func main() {
@@ -45,7 +46,11 @@ func main() {
 		}
 	case "view":
 		viewCmd.Parse(os.Args[2:])
-		log.Println("Add remove subcommand")
+		if len(os.Args) < 3 {
+      log.Println("Implement model")
+		} else {
+			view.Render(os.Args[2])
+		}
 	default:
 		log.Println("Command not recognized")
 	}

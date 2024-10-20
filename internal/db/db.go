@@ -54,6 +54,27 @@ func GetProjects() []string {
 	return projects
 }
 
+func GetProject(name string) string {
+	homeDir, err := os.UserHomeDir()
+	if err != nil {
+		log.Fatalf("DB ERROR: %s", err.Error())
+	}
+
+	projectName := strings.ToLower(name)
+
+	//Check if project already exists
+	if !projectExists(homeDir, projectName) {
+		log.Fatalf("%s does not exist\n", name)
+	}
+
+  contents, err := getProject(homeDir, projectName)
+	if err != nil {
+		log.Fatalf("Project read error: %s", err.Error())
+	}
+
+  return contents
+}
+
 func CreateProject(name, link string) {
 	homeDir, err := os.UserHomeDir()
 	if err != nil {

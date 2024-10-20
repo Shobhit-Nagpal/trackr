@@ -103,3 +103,17 @@ func removeProjectDir(trackrDir, name string) error {
 
 	return nil
 }
+
+// Read
+func getProject(homeDir, name string) (string, error) {
+	trackrDir := getTrackrPath(homeDir)
+	projectPath := getProjectPath(trackrDir, name)
+  todoFile := fmt.Sprintf("%s/%s", projectPath, "TODO.md")
+
+	contentBytes, err := os.ReadFile(todoFile)
+	if err != nil {
+		return "", err
+	}
+
+	return string(contentBytes), nil
+}
