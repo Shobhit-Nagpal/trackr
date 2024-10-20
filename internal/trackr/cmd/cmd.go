@@ -32,6 +32,7 @@ func initialModel() CmdModel {
 	return CmdModel{
 		commands: []string{"add", "remove", "list", "view"},
 		add:      add.InitialAddModel(),
+		remove:   remove.InitialRemoveModel(),
 		cursor:   0,
 		selected: 0,
 	}
@@ -79,13 +80,12 @@ func (m CmdModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 					m.cursor++
 				}
 			case "enter", " ":
-				//Handle sessionState selection --> Change view to cmd view here
 				switch m.cursor {
-				case 1:
+				case 0:
 					m.sessionState = addView
-				case 2:
+				case 1:
 					m.sessionState = removeView
-				case 3:
+				case 2:
 					m.sessionState = listView
 				}
 			}

@@ -38,11 +38,10 @@ func main() {
 		add.Render()
 	case "remove":
 		removeCmd.Parse(os.Args[2:])
-    log.Println(os.Args)
 		if len(os.Args) < 3 {
-			remove.Remove(os.Args[2])
-		} else {
 			remove.Render()
+		} else {
+			remove.Remove(os.Args[2])
 		}
 	case "view":
 		viewCmd.Parse(os.Args[2:])

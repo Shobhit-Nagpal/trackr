@@ -52,8 +52,11 @@ func (m RemoveModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m RemoveModel) View() string {
-	s := "Choose a project to delete\n\n"
-	//Read projects here
+	if len(m.projects) == 0 {
+		s := "\n\nNo projects to delete currently\n\n"
+		return s
+	}
+	s := "\n\nChoose a project to delete\n\n"
 
 	for idx, project := range m.projects {
 		cursor := " "
