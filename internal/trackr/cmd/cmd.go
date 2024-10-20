@@ -6,14 +6,15 @@ import (
 	"os"
 
 	"github.com/Shobhit-Nagpal/trackr/internal/trackr/add"
+	"github.com/Shobhit-Nagpal/trackr/internal/trackr/remove"
 	tea "github.com/charmbracelet/bubbletea"
 )
 
 const (
 	cmdView = iota
 	addView
-	listView
 	removeView
+	listView
 )
 
 type CmdModel struct {
@@ -54,6 +55,15 @@ func (m CmdModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		}
 		m.add = addModel
 		cmd = newCmd
+	case removeView:
+		newRemove, newCmd := m.remove.Update(msg)
+		removeModel, ok := newRemove.(remove.RemoveModel)
+		if !ok {
+			log.Fatalf("Error from cmd model during assertion: remove")
+			return m, tea.Quit
+		}
+		m.remove = removeModel
+		cmd = newCmd
 	default:
 		switch msg := msg.(type) {
 		case tea.KeyMsg:
@@ -70,7 +80,14 @@ func (m CmdModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				}
 			case "enter", " ":
 				//Handle sessionState selection --> Change view to cmd view here
-				m.sessionState = addView
+				switch m.cursor {
+				case 1:
+					m.sessionState = addView
+				case 2:
+					m.sessionState = removeView
+				case 3:
+					m.sessionState = listView
+				}
 			}
 
 		}
@@ -85,8 +102,11 @@ func (m CmdModel) View() string {
 	case addView:
 		viewString := m.add.View()
 		return viewString
+	case removeView:
+		viewString := m.remove.View()
+		return viewString
 	default:
-    //For the choosing of cmd
+		//For the choosing of cmd
 		s := "\n\nChoose a command \n\n"
 		//Read projects here
 

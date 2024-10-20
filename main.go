@@ -9,6 +9,7 @@ import (
 	"github.com/Shobhit-Nagpal/trackr/internal/trackr/add"
 	"github.com/Shobhit-Nagpal/trackr/internal/trackr/cmd"
 	"github.com/Shobhit-Nagpal/trackr/internal/trackr/list"
+	"github.com/Shobhit-Nagpal/trackr/internal/trackr/remove"
 )
 
 func main() {
@@ -18,15 +19,14 @@ func main() {
 		log.Fatalf("DB INIT ERROR: ", err.Error())
 	}
 
-
 	listCmd := flag.NewFlagSet("list", flag.ExitOnError)
-  addCmd := flag.NewFlagSet("add", flag.ExitOnError)
-  removeCmd := flag.NewFlagSet("remove", flag.ExitOnError)
-  viewCmd := flag.NewFlagSet("view", flag.ExitOnError)
+	addCmd := flag.NewFlagSet("add", flag.ExitOnError)
+	removeCmd := flag.NewFlagSet("remove", flag.ExitOnError)
+	viewCmd := flag.NewFlagSet("view", flag.ExitOnError)
 
 	if len(os.Args) < 2 {
 		cmd.Render()
-    return
+		return
 	}
 
 	switch os.Args[1] {
@@ -34,15 +34,20 @@ func main() {
 		listCmd.Parse(os.Args[2:])
 		list.Render()
 	case "add":
-    addCmd.Parse(os.Args[2:])
-    add.Render()
+		addCmd.Parse(os.Args[2:])
+		add.Render()
 	case "remove":
-    removeCmd.Parse(os.Args[2:])
-		log.Println("Add remove subcommand")
+		removeCmd.Parse(os.Args[2:])
+    log.Println(os.Args)
+		if len(os.Args) < 3 {
+			remove.Remove(os.Args[2])
+		} else {
+			remove.Render()
+		}
 	case "view":
-    viewCmd.Parse(os.Args[2:])
+		viewCmd.Parse(os.Args[2:])
 		log.Println("Add remove subcommand")
-  default:
-    log.Println("Command not recognized")
+	default:
+		log.Println("Command not recognized")
 	}
 }
