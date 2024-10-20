@@ -72,7 +72,7 @@ func CreateProject(name, link string) {
 		log.Fatalf("Project creation error: %s", err.Error())
 	}
 
-	fmt.Println(style.Render("Project created!"))
+	fmt.Println(style.Render("Project created!") + "\n\n")
 
 }
 
@@ -94,5 +94,5 @@ func RemoveProject(name string) {
 		log.Fatalf("Project deletion error: %s", err.Error())
 	}
 
-	fmt.Println(style.Render("Project deleted!"))
+	fmt.Println("\n\n" + style.Render("Project deleted!") + "\n\n")
 }

@@ -14,7 +14,7 @@ type ListModel struct {
 	selected int
 }
 
-func initialModel() ListModel {
+func InitialListModel() ListModel {
 	projects := db.GetProjects()
 	return ListModel{
 		projects: projects,
@@ -51,6 +51,12 @@ func (m ListModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m ListModel) View() string {
+
+	if len(m.projects) == 0 {
+		s := "\n\nNo projects to view\n\n"
+		return s
+	}
+
 	s := "Choose a project to view\n\n"
 	//Read projects here
 
@@ -72,7 +78,7 @@ func (m ListModel) View() string {
 }
 
 func Render() {
-	p := tea.NewProgram(initialModel())
+	p := tea.NewProgram(InitialListModel())
 	if _, err := p.Run(); err != nil {
 		fmt.Printf("Alas, there's been an error: %v", err)
 		os.Exit(1)

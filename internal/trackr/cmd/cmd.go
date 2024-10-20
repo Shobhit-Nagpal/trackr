@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/Shobhit-Nagpal/trackr/internal/trackr/add"
+	"github.com/Shobhit-Nagpal/trackr/internal/trackr/list"
 	"github.com/Shobhit-Nagpal/trackr/internal/trackr/remove"
 	tea "github.com/charmbracelet/bubbletea"
 )
@@ -33,6 +34,7 @@ func initialModel() CmdModel {
 		commands: []string{"add", "remove", "list", "view"},
 		add:      add.InitialAddModel(),
 		remove:   remove.InitialRemoveModel(),
+		list:     list.InitialListModel(),
 		cursor:   0,
 		selected: 0,
 	}
@@ -64,6 +66,15 @@ func (m CmdModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m, tea.Quit
 		}
 		m.remove = removeModel
+		cmd = newCmd
+	case listView:
+		newList, newCmd := m.list.Update(msg)
+		listModel, ok := newList.(list.ListModel)
+		if !ok {
+			log.Fatalf("Error from cmd model during assertion: remove")
+			return m, tea.Quit
+		}
+		m.list = listModel
 		cmd = newCmd
 	default:
 		switch msg := msg.(type) {
@@ -104,6 +115,9 @@ func (m CmdModel) View() string {
 		return viewString
 	case removeView:
 		viewString := m.remove.View()
+		return viewString
+	case listView:
+		viewString := m.list.View()
 		return viewString
 	default:
 		//For the choosing of cmd
