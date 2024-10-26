@@ -47,9 +47,9 @@ func main() {
 	case "view":
 		viewCmd.Parse(os.Args[2:])
 		if len(os.Args) < 3 {
-      log.Println("Implement model")
+      view.Render()
 		} else {
-			view.Render(os.Args[2])
+			view.RenderProject(os.Args[2])
 		}
 	default:
 		log.Println("Command not recognized")

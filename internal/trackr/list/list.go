@@ -58,7 +58,6 @@ func (m ListModel) View() string {
 	}
 
 	s := "Choose a project to view\n\n"
-	//Read projects here
 
 	for idx, project := range m.projects {
 		cursor := " "

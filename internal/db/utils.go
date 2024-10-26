@@ -67,7 +67,7 @@ func createProjectDir(trackrDir, name string) error {
 
 func createMarkdownFile(projectPath, name, link string) error {
 	fileName := fmt.Sprintf("%s/TODO.md", projectPath)
-	initialContent := fmt.Sprintf("# %s\n\n- Link: %s\n\n", name, link)
+  initialContent := fmt.Sprintf("# %s\n\n- Link: %s\n\n### To do:\n\n[] Step 1", name, link)
 	file, err := os.Create(fileName)
 	if err != nil {
 		return err
