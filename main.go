@@ -10,6 +10,7 @@ import (
 	"github.com/Shobhit-Nagpal/trackr/internal/trackr/cmd"
 	"github.com/Shobhit-Nagpal/trackr/internal/trackr/list"
 	"github.com/Shobhit-Nagpal/trackr/internal/trackr/remove"
+	"github.com/Shobhit-Nagpal/trackr/internal/trackr/update"
 	"github.com/Shobhit-Nagpal/trackr/internal/trackr/view"
 )
 
@@ -24,6 +25,7 @@ func main() {
 	addCmd := flag.NewFlagSet("add", flag.ExitOnError)
 	removeCmd := flag.NewFlagSet("remove", flag.ExitOnError)
 	viewCmd := flag.NewFlagSet("view", flag.ExitOnError)
+	updateCmd := flag.NewFlagSet("update", flag.ExitOnError)
 
 	if len(os.Args) < 2 {
 		cmd.Render()
@@ -50,6 +52,13 @@ func main() {
       view.Render()
 		} else {
 			view.RenderProject(os.Args[2])
+		}
+	case "update":
+		updateCmd.Parse(os.Args[2:])
+		if len(os.Args) < 3 {
+      log.Println("Please enter the project name to update")
+		} else {
+			update.Render(os.Args[2])
 		}
 	default:
 		log.Println("Command not recognized")
