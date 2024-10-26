@@ -7,7 +7,7 @@ import (
 	"github.com/charmbracelet/glamour"
 )
 
-func getRenderedMarkdown(name string) string {
+func GetRenderedMarkdown(name string) string {
 	project := db.GetProject(name)
 	out, err := glamour.Render(project, "dark")
 	if err != nil {

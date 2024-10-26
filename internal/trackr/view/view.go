@@ -75,7 +75,7 @@ func (m ViewModel) View() string {
 
 	switch m.sessionState {
 	case projectView:
-		s := getRenderedMarkdown(m.projects[m.selected])
+		s := GetRenderedMarkdown(m.projects[m.selected])
 		return s
 	default:
 
@@ -113,6 +113,6 @@ func Render() {
 }
 
 func RenderProject(name string) {
-	md := getRenderedMarkdown(name)
+	md := GetRenderedMarkdown(name)
 	fmt.Print(md)
 }
