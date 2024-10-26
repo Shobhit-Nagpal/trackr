@@ -2,18 +2,22 @@ package view
 
 import (
 	"fmt"
-	"log"
 	"os"
 
 	"github.com/Shobhit-Nagpal/trackr/internal/db"
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/charmbracelet/glamour"
+)
+
+const (
+	viewView = iota
+	projectView
 )
 
 type ViewModel struct {
-	projects []string
-	cursor   int
-	selected int
+	sessionState int
+	projects     []string
+	cursor       int
+	selected     int
 }
 
 func InitialViewModel() ViewModel {
@@ -30,52 +34,74 @@ func (m ViewModel) Init() tea.Cmd {
 }
 
 func (m ViewModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
-	switch msg := msg.(type) {
-	case tea.KeyMsg:
-		switch msg.String() {
-		case "ctrl+c", "q":
-			return m, tea.Quit
-		case "k", "up":
-			if m.cursor > 0 {
-				m.cursor--
+	switch m.sessionState {
+	case projectView:
+		switch msg := msg.(type) {
+		case tea.KeyMsg:
+			switch msg.String() {
+			case "ctrl+c", "q":
+				return m, tea.Quit
+			case "esc":
+				m.sessionState = viewView
+				return m, nil
 			}
-		case "j", "down":
-			if m.cursor < len(m.projects)-1 {
-				m.cursor++
+		}
+		return m, nil
+	default:
+		switch msg := msg.(type) {
+		case tea.KeyMsg:
+			switch msg.String() {
+			case "ctrl+c", "q":
+				return m, tea.Quit
+			case "k", "up":
+				if m.cursor > 0 {
+					m.cursor--
+				}
+			case "j", "down":
+				if m.cursor < len(m.projects)-1 {
+					m.cursor++
+				}
+			case "enter", " ":
+				m.sessionState = projectView
 			}
-		case "enter", " ":
-			RenderProject(m.projects[m.selected])
+
 		}
 
+		return m, nil
 	}
-
-	return m, nil
 }
 
 func (m ViewModel) View() string {
 
-	if len(m.projects) == 0 {
-		s := "\n\nNo projects to view\n\n"
+	switch m.sessionState {
+	case projectView:
+		s := getRenderedMarkdown(m.projects[m.selected])
+		return s
+	default:
+
+		if len(m.projects) == 0 {
+			s := "\n\nNo projects to view\n\n"
+			return s
+		}
+
+		s := "\n\nChoose a project to view\n\n"
+
+		for idx, project := range m.projects {
+			cursor := " "
+			if m.cursor == idx {
+				cursor = ">"
+			}
+
+			checked := " "
+			if m.selected == idx {
+				checked = "X"
+			}
+
+			s += fmt.Sprintf("%s [%s] %s\n", cursor, checked, project)
+		}
+
 		return s
 	}
-
-	s := "Choose a project to view\n\n"
-
-	for idx, project := range m.projects {
-		cursor := " "
-		if m.cursor == idx {
-			cursor = ">"
-		}
-
-		checked := " "
-		if m.selected == idx {
-			checked = "X"
-		}
-
-		s += fmt.Sprintf("%s [%s] %s\n", cursor, checked, project)
-	}
-
-	return s
 }
 
 func Render() {
@@ -87,10 +113,6 @@ func Render() {
 }
 
 func RenderProject(name string) {
-	project := db.GetProject(name)
-	out, err := glamour.Render(project, "dark")
-	if err != nil {
-		log.Fatalf("Error rendering project: %s", err.Error())
-	}
-	fmt.Print(out)
+	md := getRenderedMarkdown(name)
+	fmt.Print(md)
 }
