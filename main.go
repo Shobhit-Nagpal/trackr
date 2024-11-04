@@ -25,7 +25,6 @@ func main() {
 	addCmd := flag.NewFlagSet("add", flag.ExitOnError)
 	removeCmd := flag.NewFlagSet("remove", flag.ExitOnError)
 	viewCmd := flag.NewFlagSet("view", flag.ExitOnError)
-	updateCmd := flag.NewFlagSet("update", flag.ExitOnError)
 
 	if len(os.Args) < 2 {
 		cmd.Render()
@@ -49,16 +48,9 @@ func main() {
 	case "view":
 		viewCmd.Parse(os.Args[2:])
 		if len(os.Args) < 3 {
-      view.Render()
+			view.Render()
 		} else {
 			view.RenderProject(os.Args[2])
-		}
-	case "update":
-		updateCmd.Parse(os.Args[2:])
-		if len(os.Args) < 3 {
-      log.Println("Please enter the project name to update")
-		} else {
-			update.Render(os.Args[2])
 		}
 	default:
 		log.Println("Command not recognized")
