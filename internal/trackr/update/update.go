@@ -3,6 +3,7 @@ package update
 import (
 	"fmt"
 	"os"
+	"regexp"
 
 	"github.com/Shobhit-Nagpal/trackr/internal/trackr/view"
 	"github.com/charmbracelet/bubbles/textarea"
@@ -17,11 +18,23 @@ type UpdateModel struct {
 
 type errMsg error
 
+// Add this helper function to strip ANSI codes
+func stripANSI(str string) string {
+	// This regex matches ANSI escape codes
+	re := regexp.MustCompile(`\x1b\[[0-9;]*[a-zA-Z]`)
+	return re.ReplaceAllString(str, "")
+}
+
 func InitialUpdateModel(name string) UpdateModel {
 	md := view.GetRenderedMarkdown(name)
+  cleanMd := stripANSI(md)
 	ti := textarea.New()
 	ti.Placeholder = "Once upon a time..."
 	ti.Focus()
+
+  ti.SetValue(cleanMd)
+
+  ti.CursorEnd()
 
 	return UpdateModel{
 		textarea: ti,
@@ -31,7 +44,7 @@ func InitialUpdateModel(name string) UpdateModel {
 }
 
 func (m UpdateModel) Init() tea.Cmd {
-	return nil
+	return textarea.Blink
 }
 
 func (m UpdateModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
@@ -67,9 +80,9 @@ func (m UpdateModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 func (m UpdateModel) View() string {
 	return fmt.Sprintf(
-		"Tell me a story.\n\n%s\n\n%s",
+		"Edit your content below:\n\n%s\n\n%s",
 		m.textarea.View(),
-		"(ctrl+c to quit)",
+		"(ctrl+c to quit, ctrl+s to save)",
 	) + "\n\n"
 }
 
