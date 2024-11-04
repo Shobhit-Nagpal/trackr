@@ -10,7 +10,6 @@ import (
 	"github.com/Shobhit-Nagpal/trackr/internal/trackr/cmd"
 	"github.com/Shobhit-Nagpal/trackr/internal/trackr/list"
 	"github.com/Shobhit-Nagpal/trackr/internal/trackr/remove"
-	"github.com/Shobhit-Nagpal/trackr/internal/trackr/update"
 	"github.com/Shobhit-Nagpal/trackr/internal/trackr/view"
 )
 
